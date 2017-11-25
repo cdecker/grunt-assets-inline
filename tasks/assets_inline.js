@@ -33,6 +33,7 @@ module.exports = function(grunt) {
       inlineImg: false,
       inlineSvg: true,
       inlineSvgBase64: false,
+      inlineSvgDataUri: true,
       inlineLinkTags: false,
       includeTag: "",
       assetsUrlPrefix: "",
@@ -262,8 +263,10 @@ module.exports = function(grunt) {
 
           if (options.inlineSvgBase64) {
             $(this).attr('src', 'data:image/svg+xml;base64,' + new Buffer(grunt.file.read(filePath, { encoding: null })).toString('base64'));
-          } else {
+          } else if (options.inlineSvgDataUri) {
             $(this).attr('src', 'data:image/svg+xml;utf8,' + processSvg(grunt.file.read(filePath)));
+          } else {
+            $(this).replaceWith(grunt.file.read(filePath));
           }
 
           if (deleteOriginal) {
